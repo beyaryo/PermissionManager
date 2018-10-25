@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btn_single"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:text="Single Permission"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btn_multiple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_single"
+        android:text="Multiple Permission"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/txt_granted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        tools:text="Granted ()"/>
+
+    <TextView
+        android:id="@+id/txt_denied"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_granted"
+        android:padding="10dp"
+        tools:text="Denied ()"/>
+
+    <TextView
+        android:id="@+id/txt_disabled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_denied"
+        android:padding="10dp"
+        tools:text="Disabled ()"/>
+</RelativeLayout>
