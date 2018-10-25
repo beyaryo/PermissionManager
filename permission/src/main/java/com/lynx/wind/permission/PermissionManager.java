@@ -21,7 +21,7 @@ public class PermissionManager {
     private static int REQ_PERMISSION = 27612;
     private String TAG = "";
 
-    public PermissionManager(Activity activity, PermissionListener listener){
+    public PermissionManager(Activity activity, PermissionListener listener) {
         this.activity = activity;
         this.listener = listener;
     }
@@ -40,7 +40,7 @@ public class PermissionManager {
     /**
      * Request single permission
      */
-    public void check(String tag, String permission){
+    public void check(String tag, String permission) {
         String[] permissions = {permission};
         check(tag, permissions);
     }
@@ -56,7 +56,7 @@ public class PermissionManager {
             // When device OS is 22 or below,
             // don't worry, it's always enabled
             listener.onPermissionGranted(TAG, permissions);
-        }else if(permissions != null && permissions.length > 0){
+        } else if (permissions != null && permissions.length > 0) {
             // If list not empty, request all permissions
             ActivityCompat.requestPermissions(activity, permissions, REQ_PERMISSION);
         }
@@ -66,9 +66,9 @@ public class PermissionManager {
      * Check the result after request permission
      * Must be called inside onRequestPermissionsResult()
      */
-    public void result(int requestCode, String[] permissions, int[] grantResults){
+    public void result(int requestCode, String[] permissions, int[] grantResults) {
         // Check requestCode
-        if(requestCode == REQ_PERMISSION){
+        if (requestCode == REQ_PERMISSION) {
 
             // Vessel of all granted permissions
             ArrayList<String> granted = new ArrayList<>();
@@ -80,15 +80,19 @@ public class PermissionManager {
 
             // Iterate all permissions then
             // put every single permission to each vessel
-            for (int i = 0; i < permissions.length; i++){
-                if(grantResults[i] == PackageManager.PERMISSION_GRANTED) granted.add(permissions[i]);
-                else if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i])) denied.add(permissions[i]);
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED)
+                    granted.add(permissions[i]);
+                else if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i]))
+                    denied.add(permissions[i]);
                 else disabled.add(permissions[i]);
             }
 
-            if(granted.size() > 0) listener.onPermissionGranted(TAG, granted.toArray(new String[0]));
-            if(denied.size() > 0) listener.onPermissionDenied(TAG, denied.toArray(new String[0]));
-            if(disabled.size() > 0) listener.onPermissionDisabled(TAG, disabled.toArray(new String[0]));
+            if (granted.size() > 0)
+                listener.onPermissionGranted(TAG, granted.toArray(new String[0]));
+            if (denied.size() > 0) listener.onPermissionDenied(TAG, denied.toArray(new String[0]));
+            if (disabled.size() > 0)
+                listener.onPermissionDisabled(TAG, disabled.toArray(new String[0]));
         }
     }
 
@@ -96,7 +100,7 @@ public class PermissionManager {
      * Show alert dialog to redirect user to setting page
      * WARNING Activity must use Theme.AppCompat theme (or descendant)
      */
-    public void alert(String body, String positiveButton, String negativeButton){
+    public void alert(String body, String positiveButton, String negativeButton) {
         new AlertDialog.Builder(activity)
                 .setMessage(body)
                 .setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
@@ -104,7 +108,7 @@ public class PermissionManager {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent();
                         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.setData(Uri.fromParts("package", activity.getPackageName(), null ));
+                        intent.setData(Uri.fromParts("package", activity.getPackageName(), null));
                         activity.startActivity(intent);
                         dialog.dismiss();
                     }

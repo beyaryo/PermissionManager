@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lynx.wind.permission.PermissionListener;
 import com.lynx.wind.permission.PermissionManager;
@@ -33,6 +34,11 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Check if camera permission is granted
+        if (PermissionManager.isGranted(this, Manifest.permission.CAMERA)) {
+            Toast.makeText(this, "Camera enabled", Toast.LENGTH_SHORT).show();
+        }
 
         // Bind view
         txtGranted = findViewById(R.id.txt_granted);
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
         // Do something here when permission is granted
         StringBuilder msg = new StringBuilder("Granted (" + permissions.length + ")");
 
-        for (String perm: permissions){
+        for (String perm : permissions) {
             msg.append("\n").append(perm);
         }
 
@@ -93,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
     public void onPermissionDenied(String tag, String[] permissions) {
         StringBuilder msg = new StringBuilder("Denied (" + permissions.length + ")");
 
-        for (String perm: permissions){
+        for (String perm : permissions) {
             msg.append("\n").append(perm);
         }
 
@@ -110,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
     public void onPermissionDisabled(String tag, String[] permissions) {
         StringBuilder msg = new StringBuilder("Disabled (" + permissions.length + ")");
 
-        for (String perm: permissions){
+        for (String perm : permissions) {
             msg.append("\n").append(perm);
         }
 
