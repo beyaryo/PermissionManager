@@ -101,6 +101,35 @@ public class PermissionManager {
     }
 
     /**
+     * Request all permissions in manifest without tag
+     */
+    public void checkAllFromManifest(){
+        checkAllFromManifest("");
+    }
+
+    /**
+     * Request all permissions in manifest with tag
+     */
+    public void checkAllFromManifest(String tag){
+        String[] permissions = {};
+
+        try{
+            if(activity != null)
+                permissions = activity
+                        .getPackageManager()
+                        .getPackageInfo(activity.getPackageName(), PackageManager.GET_PERMISSIONS)
+                        .requestedPermissions;
+            else
+                permissions = fragment
+                        .getContext().getPackageManager()
+                        .getPackageInfo(fragment.getActivity().getPackageName(), PackageManager.GET_PERMISSIONS)
+                        .requestedPermissions;
+        }catch (Exception ignore){}
+
+        check(permissions, tag);
+    }
+
+    /**
      * Check the result after request permission
      * Must be called inside onRequestPermissionsResult()
      */

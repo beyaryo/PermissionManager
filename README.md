@@ -13,7 +13,7 @@ allprojects {
 Add dependecies to your module-level `build.gradle`:
 ```
 dependencies {
-   implementation 'com.github.beyaryo:PermissionManager:0.1.0'
+   implementation 'com.github.beyaryo:PermissionManager:1.0.3'
 }
 ```
 ## Usage
@@ -61,6 +61,12 @@ String[] multiplePermission = {
           Manifest.permission.READ_CONTACTS,
           Manifest.permission.WRITE_EXTERNAL_STORAGE};
 manager.check(multiplePermission, "TAG");
+```
+Or you can request all the permissions writen in your manifest :
+```java
+PermissionManager manager = new PermissionManager(your_activity, your_listener);
+
+manager.checkAllFromManifest("TAG");
 ```
 Parameter **TAG** is just for flag to distinguish a process with other process. Or you can just add a simple String like **""**.
 
