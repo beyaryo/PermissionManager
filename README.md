@@ -17,7 +17,7 @@ dependencies {
 }
 ```
 ## Usage
-First you need to implement PermissionListener to your Activity
+First you need to implement PermissionListener to your Activity or fragment
 
 ```java
 public class MyActivity extends AppCompatActivity implements PermissionListener {
@@ -39,6 +39,11 @@ public class MyActivity extends AppCompatActivity implements PermissionListener 
 }
 ```
 It will require you to add 3 functions. Those function will be called after user do some action when permission is requested.
+
+**IMPORTANT!!** if you use this library in a `Fragment` make sure to initialize `PermissionManager` class like this
+```java
+PermissionManager manager = new PermissionManager(your_fragment, your_listener);
+``` 
 
 You can check single permission :
 ```java
