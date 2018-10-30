@@ -13,7 +13,7 @@ allprojects {
 Add dependecies to your module-level `build.gradle`:
 ```
 dependencies {
-   implementation 'com.github.beyaryo:PermissionManager:0.1.0'
+   implementation 'com.github.beyaryo:PermissionManager:1.0.2'
 }
 ```
 ## Usage
