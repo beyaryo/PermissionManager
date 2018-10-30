@@ -9,20 +9,28 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PermissionManager {
 
     private Activity activity;
+    private Fragment fragment;
     private PermissionListener listener;
     private static int REQ_PERMISSION = 27612;
     private String TAG = "";
 
     public PermissionManager(Activity activity, PermissionListener listener) {
         this.activity = activity;
+        this.listener = listener;
+    }
+
+    public PermissionManager(Fragment fragment, PermissionListener listener) {
+        this.fragment = fragment;
         this.listener = listener;
     }
 
@@ -38,27 +46,57 @@ public class PermissionManager {
     }
 
     /**
-     * Request single permission
+     * Request list permissions without tag
      */
-    public void check(String tag, String permission) {
-        String[] permissions = {permission};
-        check(tag, permissions);
+    public void check(List<String> permissions) {
+        check(permissions.toArray(new String[0]), "");
     }
 
     /**
-     * Request multiple permission
+     * Request list permissions with tag
      */
-    public void check(String tag, String[] permissions) {
+    public void check(List<String> permissions, String tag) {
+        check(permissions.toArray(new String[0]), tag);
+    }
+
+    /**
+     * Request single permission without tag
+     */
+    public void check(String permission) {
+        String[] permissions = {permission};
+        check(permissions, "");
+    }
+
+    /**
+     * Request single permission with tag
+     */
+    public void check(String permission, String tag) {
+        String[] permissions = {permission};
+        check(permissions, tag);
+    }
+
+    /**
+     * Request multiple permissions without tag
+     */
+    public void check(String[] permissions) {
+        check(permissions, "");
+    }
+
+    /**
+     * Request multiple permission with tag
+     */
+    public void check(String[] permissions, String tag) {
         this.TAG = tag;
 
         // Check device OS
         if (Build.VERSION.SDK_INT <= 22) {
             // When device OS is 22 or below,
             // don't worry, it's always enabled
-            listener.onPermissionGranted(TAG, permissions);
+            listener.onPermissionGranted(permissions, TAG);
         } else if (permissions != null && permissions.length > 0) {
             // If list not empty, request all permissions
-            ActivityCompat.requestPermissions(activity, permissions, REQ_PERMISSION);
+            if (activity != null) activity.requestPermissions(permissions, REQ_PERMISSION);
+            else fragment.requestPermissions(permissions, REQ_PERMISSION);
         }
     }
 
@@ -83,16 +121,18 @@ public class PermissionManager {
             for (int i = 0; i < permissions.length; i++) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED)
                     granted.add(permissions[i]);
-                else if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i]))
+                else if (activity != null && ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i]))
+                    denied.add(permissions[i]);
+                else if (fragment.shouldShowRequestPermissionRationale(permissions[i]))
                     denied.add(permissions[i]);
                 else disabled.add(permissions[i]);
             }
 
             if (granted.size() > 0)
-                listener.onPermissionGranted(TAG, granted.toArray(new String[0]));
-            if (denied.size() > 0) listener.onPermissionDenied(TAG, denied.toArray(new String[0]));
+                listener.onPermissionGranted(granted.toArray(new String[0]), TAG);
+            if (denied.size() > 0) listener.onPermissionDenied(denied.toArray(new String[0]), TAG);
             if (disabled.size() > 0)
-                listener.onPermissionDisabled(TAG, disabled.toArray(new String[0]));
+                listener.onPermissionDisabled(disabled.toArray(new String[0]), TAG);
         }
     }
 
@@ -101,15 +141,25 @@ public class PermissionManager {
      * WARNING Activity must use Theme.AppCompat theme (or descendant)
      */
     public void alert(String body, String positiveButton, String negativeButton) {
-        new AlertDialog.Builder(activity)
+        Context context = activity;
+        if (fragment != null) context = fragment.getContext();
+
+        new AlertDialog.Builder(context)
                 .setMessage(body)
                 .setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String packageName = "";
+                        if (activity != null) packageName = activity.getPackageName();
+                        else packageName = fragment.getActivity().getPackageName();
+
                         Intent intent = new Intent();
                         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.setData(Uri.fromParts("package", activity.getPackageName(), null));
-                        activity.startActivity(intent);
+                        intent.setData(Uri.fromParts("package", packageName, null));
+
+                        if (activity != null) activity.startActivity(intent);
+                        else fragment.startActivity(intent);
+
                         dialog.dismiss();
                     }
                 })

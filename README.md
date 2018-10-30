@@ -23,17 +23,17 @@ First you need to implement PermissionListener to your Activity
 public class MyActivity extends AppCompatActivity implements PermissionListener {
     
     @Override
-    public void onPermissionGranted(String tag, String[] permissions) {
+    public void onPermissionGranted(String[] permissions, String tag) {
         // Do something when permission granted
     }
 
     @Override
-    public void onPermissionDenied(String tag, String[] permissions) {
+    public void onPermissionDenied(String[] permissions, String tag) {
         // Do something when permission denied
     }
 
     @Override
-    public void onPermissionDisabled(String tag, String[] permissions) {
+    public void onPermissionDisabled(String[] permissions, String tag) {
         // Do something when permission disabled
     }
 }
@@ -45,7 +45,7 @@ You can check single permission :
 PermissionManager manager = new PermissionManager(your_activity, your_listener);
 
 String singlePermission = Manifest.permission.CAMERA;
-manager.check("TAG", singlePermission);
+manager.check(singlePermission, "TAG");
 ```
 Or for multiple permission you can do :
 ```java
@@ -55,7 +55,7 @@ String[] multiplePermission = {
           Manifest.permission.READ_SMS,
           Manifest.permission.READ_CONTACTS,
           Manifest.permission.WRITE_EXTERNAL_STORAGE};
-manager.check("TAG", multiplePermission);
+manager.check(multiplePermission, "TAG");
 ```
 Parameter **TAG** is just for flag to distinguish a process with other process. Or you can just add a simple String like **""**.
 
@@ -72,17 +72,17 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
 After that you can do whatever you want on previous 3 method implemented from `PermissionListener` :
 ```java
 @Override
-public void onPermissionGranted(String tag, String[] permissions) {
+public void onPermissionGranted(String[] permissions, String tag) {
     // Do something when permission granted
 }
 
 @Override
-public void onPermissionDenied(String tag, String[] permissions) {
+public void onPermissionDenied(String[] permissions, String tag) {
     // Do something when permission denied
 }
 
 @Override
-public void onPermissionDisabled(String tag, String[] permissions) {
+public void onPermissionDisabled(String[] permissions, String tag) {
     // Do something when permission disabled
 }
 ```

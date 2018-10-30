@@ -1,10 +1,14 @@
 package com.lynx.wind.permissionsample;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -50,16 +54,32 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
         btnSingle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                manager.check("", singlePermission);
+                manager.check(singlePermission, "");
             }
         });
 
         btnMultiple.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                manager.check("", multiplePermission);
+                manager.check(multiplePermission, "");
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_to_fragment:
+                startActivity(new Intent(MainActivity.this, FragmentSampleActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -79,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
      * so the permission is granted XD
      */
     @Override
-    public void onPermissionGranted(String tag, String[] permissions) {
+    public void onPermissionGranted(String[] permissions, String tag) {
         // Do something here when permission is granted
         StringBuilder msg = new StringBuilder("Granted (" + permissions.length + ")");
 
@@ -96,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
      * when user click deny on some permission requested
      */
     @Override
-    public void onPermissionDenied(String tag, String[] permissions) {
+    public void onPermissionDenied(String[] permissions, String tag) {
         StringBuilder msg = new StringBuilder("Denied (" + permissions.length + ")");
 
         for (String perm : permissions) {
@@ -113,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
      * or user disabled the permission from setting
      */
     @Override
-    public void onPermissionDisabled(String tag, String[] permissions) {
+    public void onPermissionDisabled(String[] permissions, String tag) {
         StringBuilder msg = new StringBuilder("Disabled (" + permissions.length + ")");
 
         for (String perm : permissions) {

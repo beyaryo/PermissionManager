@@ -10,19 +10,19 @@ public interface PermissionListener {
      * @param tag         the tag
      * @param permissions the permissions
      */
-    void onPermissionGranted(String tag, String[] permissions);
+    void onPermissionGranted(String[] permissions, String tag);
 
     /**
      * On permission denied.
      * @param tag         the tag
      * @param permissions the permissions
      */
-    void onPermissionDenied(String tag, String[] permissions);
+    void onPermissionDenied(String[] permissions, String tag);
 
     /**
      * On permission disabled.
      * @param tag         the tag
      * @param permissions the permissions
      */
-    void onPermissionDisabled(String tag, String[] permissions);
+    void onPermissionDisabled(String[] permissions, String tag);
 }
