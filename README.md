@@ -13,7 +13,7 @@ allprojects {
 Add dependecies to your module-level `build.gradle`:
 ```
 dependencies {
-   implementation 'com.github.beyaryo:PermissionManager:1.0.3'
+   implementation 'com.github.beyaryo:PermissionManager:1.0.4'
 }
 ```
 ## Usage
@@ -75,7 +75,7 @@ Parameter **TAG** is just for flag to distinguish a process with other process. 
 PermissionManager manager = new PermissionManager(your_activity, your_listener);
 ...
 @Override
-public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
     // REQUIRED
     manager.result(requestCode, permissions, grantResults);
 }
@@ -113,7 +113,7 @@ If you want the permission so badly but user disabled it, you can show alert dia
 ```java
 PermissionManager manager = new PermissionManager(your_activity, your_listener);
 ...
-manager.alert("Some permission is required", "To setting", "Not now");
+manager.alert("Some permission is required", "Not now", "To setting");
 ```
 **IMPORTANT!!** your Activity must use Theme.AppCompat theme (or descendant) to call this method
 ## License

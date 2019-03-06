@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +15,10 @@ import android.widget.Toast;
 
 import com.lynx.wind.permission.PermissionListener;
 import com.lynx.wind.permission.PermissionManager;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.Callable;
 
 public class MainActivity extends AppCompatActivity implements PermissionListener {
 
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
         setContentView(R.layout.activity_main);
 
         // Check if camera permission is granted
-        if (PermissionManager.isGranted(this, Manifest.permission.CAMERA)) {
+        if (PermissionManager.Companion.isGranted(this, Manifest.permission.CAMERA)) {
             Toast.makeText(this, "Camera enabled", Toast.LENGTH_SHORT).show();
         }
 
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
      * so the permission is granted XD
      */
     @Override
-    public void onPermissionGranted(String[] permissions, String tag) {
+    public void onPermissionGranted(@NotNull String[] permissions, @NotNull String tag) {
         // Do something here when permission is granted
         StringBuilder msg = new StringBuilder("Granted (" + permissions.length + ")");
 
@@ -116,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
      * when user click deny on some permission requested
      */
     @Override
-    public void onPermissionDenied(String[] permissions, String tag) {
+    public void onPermissionDenied(@NotNull String[] permissions, @NotNull String tag) {
         StringBuilder msg = new StringBuilder("Denied (" + permissions.length + ")");
 
         for (String perm : permissions) {
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
      * or user disabled the permission from setting
      */
     @Override
-    public void onPermissionDisabled(String[] permissions, String tag) {
+    public void onPermissionDisabled(@NotNull String[] permissions, @NotNull String tag) {
         StringBuilder msg = new StringBuilder("Disabled (" + permissions.length + ")");
 
         for (String perm : permissions) {
@@ -143,6 +146,6 @@ public class MainActivity extends AppCompatActivity implements PermissionListene
         txtDisabled.setText(msg);
 
         // Show alert dialog when some permissions are disabled
-        manager.alert("Some permission is required", "To setting", "Not now");
+        manager.alert("Some permission is required", "Not now", "To setting");
     }
 }
